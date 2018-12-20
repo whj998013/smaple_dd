@@ -8,6 +8,7 @@ import bus from './bus.js'
 import util from './libs/util.js'
 Vue.prototype.$bus = bus;
 Vue.prototype.$util = util;
+Vue.prototype.$Auth=bus.Auth;
 import  { AlertPlugin,LoadingPlugin,ConfirmPlugin } from 'vux';
 Vue.use(AlertPlugin);
 Vue.use(LoadingPlugin);

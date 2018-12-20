@@ -38,10 +38,8 @@ export default {
       });
     },
     loginFinsh(user) {
-    
       this.$bus.setCookieUser(user);
       this.$router.back(-1);
-   
     },
 
     cookinLogin() {
