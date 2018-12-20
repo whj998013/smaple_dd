@@ -14,7 +14,6 @@ export default {
   },
 
   mounted() {    
-
     let status = this.$route.params.status;
     if (status == 401) {
       this.$Notice.error({
