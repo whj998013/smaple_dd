@@ -12,6 +12,7 @@ export default new Vue({
   },
   computed: {
     isLogin() {
+      //a
       return this.currentUser == undefined ? false : true;
     },
     isLimt() {
