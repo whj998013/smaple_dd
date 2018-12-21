@@ -25,6 +25,9 @@
       <cell-box>
         入库人：{{sample.User}}
       </cell-box>
+       <cell-box>
+        部门:{{sample.DeptName}}
+      </cell-box>
       <cell-box>
         可否外借：{{canLendoutText}}
       </cell-box>
@@ -50,7 +53,7 @@
       <cell-box>
         现货信息：{{haveStock}}
       </cell-box>
-      <cell-box>
+      <cell-box v-if="sample.HaveStock">
         <x-table>
           <thead>
             <tr>
@@ -60,7 +63,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item,index) in sample.StockData" :key="index" v-if="sample.HaveStock">
+            <tr v-for="(item,index) in sample.StockData" :key="index">
               <td>{{item.size}}</td>
               <td>{{item.color}}</td>
               <td>{{item.num}}</td>
@@ -93,6 +96,12 @@
       <cell-box>
         程序员：{{sample.ProgamPeople}}
       </cell-box>
+       <cell-box>
+        织机时间：{{sample.WeaveTime}}
+      </cell-box>
+       <cell-box>
+        套口时间：{{sample.LinkTime}}
+      </cell-box>
       <cell-box>
         打样日期：{{sample.ProofingDate}}
       </cell-box>
@@ -115,9 +124,12 @@
       </cell-box>
     </group>
     <group v-if="isLimt">
-      <cell-box>附件：(请使用PC版登录下载附件)</cell-box>
-      <cell-box v-for="(item,index) in sample.fileList" :key="index">
+      <cell-box >附件：(请使用钉钉PC版下载附件)</cell-box>
+      <cell-box v-for="(item,index) in sample.FileList" :key="index">
         {{ item.name}}
+      </cell-box>
+       <cell-box v-if="!haveFile">
+         没有附件
       </cell-box>
     </group>
     <x-button v-if="!isdd&&showlend" type="primary" @click.native="lendout">借出</x-button>
@@ -152,11 +164,16 @@ export default {
     },
     allSampleCanLend() {
       return this.$bus.allSampleCanLend;
-    }
+    },
+    haveFile(){
+       if(this.sample.FileList.length>0) return true;
+       else return false;
+    },
   },
   data() {
     return {
-      sample: {},
+      sample: {
+      },
       picstr: "",
       id: "",
       Material: "",
