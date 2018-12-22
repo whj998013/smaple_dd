@@ -4,12 +4,21 @@
       <cell-box v-if="!isdd">
         样衣ID：{{sample.StyleId}}
       </cell-box>
-      <swiper :list="sample.PicList" height="240px" @on-click-list-item="showPic"></swiper>
+      <swiper
+        :list="sample.PicList"
+        height="240px"
+        @on-click-list-item="showPic"
+      ></swiper>
     </group>
     <group>
 
       <div style="padding:10px 15px 10px 15px">
-        <div class="ivu-tag" :style="'background:'+item.color" v-for="item in sample.StyleTag" :key="item.name">
+        <div
+          class="ivu-tag"
+          :style="'background:'+item.color"
+          v-for="item in sample.StyleTag"
+          :key="item.name"
+        >
           <span>{{item.name}}</span>
         </div>
       </div>
@@ -25,7 +34,7 @@
       <cell-box>
         入库人：{{sample.User}}
       </cell-box>
-       <cell-box>
+      <cell-box>
         部门:{{sample.DeptName}}
       </cell-box>
       <cell-box>
@@ -63,7 +72,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item,index) in sample.StockData" :key="index">
+            <tr
+              v-for="(item,index) in sample.StockData"
+              :key="index"
+            >
               <td>{{item.size}}</td>
               <td>{{item.color}}</td>
               <td>{{item.num}}</td>
@@ -96,10 +108,10 @@
       <cell-box>
         程序员：{{sample.ProgamPeople}}
       </cell-box>
-       <cell-box>
+      <cell-box>
         织机时间：{{sample.WeaveTime}}
       </cell-box>
-       <cell-box>
+      <cell-box>
         套口时间：{{sample.LinkTime}}
       </cell-box>
       <cell-box>
@@ -124,15 +136,22 @@
       </cell-box>
     </group>
     <group v-if="isLimt">
-      <cell-box >附件：(请使用钉钉PC版下载附件)</cell-box>
-      <cell-box v-for="(item,index) in sample.FileList" :key="index">
+      <cell-box>附件：(请使用钉钉PC版下载附件)</cell-box>
+      <cell-box
+        v-for="(item,index) in sample.FileList"
+        :key="index"
+      >
         {{ item.name}}
       </cell-box>
-       <cell-box v-if="!haveFile">
-         没有附件
+      <cell-box v-if="!haveFile">
+        没有附件
       </cell-box>
     </group>
-    <x-button v-if="!isdd&&showlend" type="primary" @click.native="lendout">借出</x-button>
+    <x-button
+      v-if="!isdd&&showlend"
+      type="primary"
+      @click.native="lendout"
+    >借出</x-button>
 
     <br><br><br>
   </div>
@@ -165,15 +184,16 @@ export default {
     allSampleCanLend() {
       return this.$bus.allSampleCanLend;
     },
-    haveFile(){
-       if(this.sample.FileList.length>0) return true;
-       else return false;
-    },
+    haveFile() {
+      if (this.sample.FileList != undefined) {
+        if (this.sample.FileList.length > 0) return true;
+      }; 
+       return false;
+    }
   },
   data() {
     return {
-      sample: {
-      },
+      sample: {},
       picstr: "",
       id: "",
       Material: "",
@@ -207,29 +227,29 @@ export default {
         });
       }
     });
+    document.body.scrollTop = 0;
     this.$vux.loading.hide();
   },
   methods: {
-    beginLendOut(){
-          this.doLendout(this.sample.StyleId).then(p => {
-            this.$bus.$emit("addLend", this.sample);
-            this.$router.push("/lend?showmenu=false");
-          });
+    beginLendOut() {
+      this.doLendout(this.sample.StyleId).then(p => {
+        this.$bus.$emit("addLend", this.sample);
+        this.$router.push("/lend?showmenu=false");
+      });
     },
     lendout() {
-      let _this=this;
+      let _this = this;
       if (this.alowLendout) {
         if (this.sample.CanLendOut) {
-         _this.beginLendOut();
+          _this.beginLendOut();
         } else {
-          
           this.$vux.confirm.show({
-          title: "不可外借",
-          content: "此样衣被设定为不定外借，是否继续外借。",
-          onConfirm() {_this.beginLendOut();}
+            title: "不可外借",
+            content: "此样衣被设定为不定外借，是否继续外借。",
+            onConfirm() {
+              _this.beginLendOut();
+            }
           });
-
-
         }
       }
     },

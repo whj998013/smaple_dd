@@ -26,10 +26,18 @@ let router = new Router({
         {
           path: '/',
           meta: {
-            title: '借样衣',
+            title: '样衣库',
             requireAuth: true,
           },
-          component: (resolve) => require(['../views/lend.vue'], resolve)
+          component: (resolve) => require(['../views/sampleList.vue'], resolve)
+        },
+        {
+          path: '/sampleList',
+          meta: {
+            title: '样衣库',
+            requireAuth: true,
+          },
+          component: (resolve) => require(['../views/sampleList.vue'], resolve)
         },
         {
           path: '/lend',

@@ -1,15 +1,19 @@
 <template>
   <div>
 
-    <router-view></router-view>
+    <router-view keep-alive></router-view>
+   
     <tabbar style="position:fixed">   
-      <tabbar-item  selected link="/lend?showmenu=false">
-        <img slot="icon" src="../assets/scan.png">
+         <tabbar-item  selected link="/sampleList?showmenu=false">
+        <img slot="icon" src="../assets/huopinliebiao.png">
+        <span slot="label">样衣库</span>
+      </tabbar-item>
+      <tabbar-item   link="/lend?showmenu=false">
+        <img slot="icon" src="../assets/erweima.png">
         <span slot="label">扫码借用</span>
       </tabbar-item>
-      <tabbar-item badge=""  link="/lendlist?showmenu=false">
-        <img slot="icon" src="../assets/sweater0.png">
-        <img slot="icon-active" src="../assets/sweater1.png">
+      <tabbar-item  link="/lendlist?showmenu=false">
+        <img slot="icon" src="../assets/gukeliebiao.png">
         <span slot="label">已借样衣</span>
       </tabbar-item>
     </tabbar>
@@ -29,7 +33,6 @@ export default {
   },
   data() {
     return {
-            msg: "Hello World!"
     };
   },
   methods: {

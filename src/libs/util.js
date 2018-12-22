@@ -48,6 +48,6 @@ util.removeByValue = (arr, val) => {
             break;
         }
     }
-}
+};
 
 export default util;
