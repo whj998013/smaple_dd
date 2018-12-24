@@ -100,8 +100,7 @@ export default {
       this.getData();
     },
     doAction(menuKey, menuItem) {
-      console.log(menuKey, menuItem);
-      if (menuKey == "info") {
+         if (menuKey == "info") {
         this.showSample();
       }
     },
@@ -114,8 +113,10 @@ export default {
     },
     showSeach() {
       this.isShowSeach = true;
+      
       this.$nextTick(() => {
         this.$refs.search.setFocus();
+        document.body.scrollTop = 0;
       });
     },
     onCancel() {
@@ -168,7 +169,7 @@ export default {
       return list;
     },
     scrollBottom() {
-      // 滚动到页面底部时，请求前一天的文章内容
+      // 滚动到页面底部时
       var scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop; // 滚动高度
       if (
@@ -181,8 +182,6 @@ export default {
         this.seachObj.current++;
         this.getData()
           .then(re => {
-            console.log("pre", re);
-
             if (re.items.length > 0) {
               this.$nextTick(() => {
                 // 请求的数据加载完成后，再次滚动到底部时，允许请求据
