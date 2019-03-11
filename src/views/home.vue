@@ -10,7 +10,7 @@
       </tabbar-item>
       <tabbar-item   link="/lend?showmenu=false">
         <img slot="icon" src="../assets/erweima.png">
-        <span slot="label">扫码借用a</span>
+        <span slot="label">扫码借用</span>
       </tabbar-item>
       <tabbar-item  link="/lendlist?showmenu=false">
         <img slot="icon" src="../assets/gukeliebiao.png">
