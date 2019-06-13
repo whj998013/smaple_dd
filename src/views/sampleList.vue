@@ -1,38 +1,13 @@
 <template>
   <div>
-    <search
-      v-show="isShowSeach"
-      v-model="seachValue"
-      @on-cancel="onCancel"
-      @on-submit="onSubmit"
-      position="absolute"
-      ref="search"
-    ></search>
-    <x-button
-      v-if="!isdd"
-      type="primary"
-      @click.native="showSeach"
-    >搜索</x-button>
-    <panel
-      id="S_content"
-      :header="'共有'+seachObj.total+'款样衣'"
-      :list="sampleList"
-      type="1"
-      @on-click-item="handlePanelClick"
-    ></panel>
-    <load-more
-      :show-loading="loading"
-      :tip="tips"
-    ></load-more>
+    <search v-show="isShowSeach" v-model="seachValue" @on-cancel="onCancel" @on-submit="onSubmit" position="absolute" ref="search"></search>
+    <x-button v-if="!isdd" type="primary" @click.native="showSeach">搜索</x-button>
+    <panel id="S_content" :header="'共有'+seachObj.total+'款样衣'" :list="sampleList" type="1" @on-click-item="handlePanelClick"></panel>
+    <load-more :show-loading="loading" :tip="tips"></load-more>
     <br>
     <br>
     <div v-transfer-dom>
-      <actionsheet
-        v-model="show2"
-        :menus="menu2"
-        @on-click-menu="doAction"
-        show-cancel
-      >
+      <actionsheet v-model="show2" :menus="menu2" @on-click-menu="doAction" show-cancel>
       </actionsheet>
     </div>
   </div>
@@ -100,7 +75,7 @@ export default {
       this.getData();
     },
     doAction(menuKey, menuItem) {
-         if (menuKey == "info") {
+      if (menuKey == "info") {
         this.showSample();
       }
     },
@@ -113,7 +88,7 @@ export default {
     },
     showSeach() {
       this.isShowSeach = true;
-      
+
       this.$nextTick(() => {
         this.$refs.search.setFocus();
         document.body.scrollTop = 0;
@@ -147,11 +122,12 @@ export default {
     },
     getShowLendList(ls) {
       //取数据
+     // debugger;
       let pichost = this.$util.fileUrl;
       let list = ls.map(item => {
         let cf = this.$util.getMaterial(item.Material);
         return {
-          src: pichost + "/pic/MinPic/" + item.Pic,
+          src: pichost + "/src/sample/pic/MinPic/" + item.Pic,
           title: item.StyleId,
           StyleId: item.StyleId,
           desc:
@@ -211,7 +187,7 @@ export default {
         show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
         control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
         text: "搜索", //控制显示文本，空字符串表示显示默认文本
-        onSuccess: function(result) {
+        onSuccess: function (result) {
           //如果control为true，则onSuccess将在发生按钮点击事件被回调
           _this.showSeach();
         }

@@ -279,10 +279,12 @@ export default {
           })
           .then(result => {
             if (result.data) {
+              
               this.sample = result.data;
               result.data.PicList.forEach(item => {
-                item.rurl = this.$util.fileUrl + "/pic/" + item.name;
-                item.img = this.$util.fileUrl + "/pic/minPic/" + item.name;
+                //debugger;
+                item.rurl = this.$util.fileUrl + "/src/sample/pic/" + item.name;
+                item.img = this.$util.fileUrl + "/src/sample/pic/minPic/" + item.name;
                 this.picstrList.push(item.rurl);
               });
               for (let p of result.data.Material) {

@@ -128,7 +128,7 @@ export default {
       let list = ls.map(item => {
         let cf = this.$util.getMaterial(JSON.parse(item.Material));
         return {
-          src: pichost + "/pic/MinPic/" + item.Pic,
+          src: pichost + "/src/sample/pic/MinPic/" + item.Pic,
           title: item.StyleId + "&nbsp&nbsp[" + item.StatsText + "]",
           StyleId: item.StyleId,
           State: item.State,
