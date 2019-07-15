@@ -5,7 +5,9 @@ import bus from "../bus.js";
 import Util from './util';
 
 let loginApi = {
+    isLoginNow:false,
     beginLogin() {
+
         let _this = this;
         return new Promise(function (resolve, reject) {
             _this.cookieLogin().then(re => {

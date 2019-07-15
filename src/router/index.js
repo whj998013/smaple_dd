@@ -17,7 +17,7 @@ let router = new Router({
     },
     {
       path: '/',
-      name: 'Home',
+     
       meta: {
         requireAuth: true,
       },

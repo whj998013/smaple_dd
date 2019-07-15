@@ -122,7 +122,7 @@ export default {
     },
     getShowLendList(ls) {
       //取数据
-     // debugger;
+      // debugger;
       let pichost = this.$util.fileUrl;
       let list = ls.map(item => {
         let cf = this.$util.getMaterial(item.Material);

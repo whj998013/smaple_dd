@@ -4,21 +4,12 @@
       <cell-box v-if="!isdd">
         样衣ID：{{sample.StyleId}}
       </cell-box>
-      <swiper
-        :list="sample.PicList"
-        height="240px"
-        @on-click-list-item="showPic"
-      ></swiper>
+      <swiper :list="sample.PicList" height="240px" @on-click-list-item="showPic"></swiper>
     </group>
     <group>
 
       <div style="padding:10px 15px 10px 15px">
-        <div
-          class="ivu-tag"
-          :style="'background:'+item.color"
-          v-for="item in sample.StyleTag"
-          :key="item.name"
-        >
+        <div class="ivu-tag" :style="'background:'+item.color" v-for="item in sample.StyleTag" :key="item.name">
           <span>{{item.name}}</span>
         </div>
       </div>
@@ -54,8 +45,11 @@
       <cell-box>
         克重：{{sample.Weight}}g
       </cell-box>
-      <cell-box>
-        成份：{{Material}}
+      <cell-box v-for="item in mList" :key="item.yranId">
+       纱线_{{item.yarnId}}、{{item.counts==""?"":"支数："+item.counts+" "}}成份:{{item.Material}}
+      </cell-box>
+      <cell-box v-if="sample.Counts!=''">
+        支数:{{sample.Counts}}
       </cell-box>
     </group>
     <group>
@@ -72,10 +66,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(item,index) in sample.StockData"
-              :key="index"
-            >
+            <tr v-for="(item,index) in sample.StockData" :key="index">
               <td>{{item.size}}</td>
               <td>{{item.color}}</td>
               <td>{{item.num}}</td>
@@ -137,25 +128,16 @@
     </group>
     <group v-if="isLimt">
       <cell-box>附件：(请使用钉钉PC版下载附件)</cell-box>
-      <cell-box
-        v-for="(item,index) in sample.FileList"
-        :key="index"
-      >
+      <cell-box v-for="(item,index) in sample.FileList" :key="index">
         {{ item.name}}
       </cell-box>
       <cell-box v-if="!haveFile">
         没有附件
       </cell-box>
     </group>
-    <x-button
-      v-if="!isdd&&showlend"
-      type="primary"
-      @click.native="lendout"
-    >借出</x-button>
-
+    <x-button v-if="!isdd&&showlend" type="primary" @click.native="lendout">借出</x-button>
     <br><br><br>
   </div>
-
 </template>
 
 <script>
@@ -187,12 +169,13 @@ export default {
     haveFile() {
       if (this.sample.FileList != undefined) {
         if (this.sample.FileList.length > 0) return true;
-      }; 
-       return false;
+      };
+      return false;
     }
   },
   data() {
     return {
+      mList:[],
       sample: {},
       picstr: "",
       id: "",
@@ -215,11 +198,11 @@ export default {
           show: _this.showlend && _this.alowLendout, //控制按钮显示， true 显示， false 隐藏， 默认true
           control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
           text: "借用", //控制显示文本，空字符串表示显示默认文本
-          onSuccess: function(result) {
+          onSuccess: function (result) {
             //如果control为true，则onSuccess将在发生按钮点击事件被回调
             _this.lendout();
           },
-          onFail: function(err) {}
+          onFail: function (err) { }
         });
 
         dd.biz.navigation.setTitle({
@@ -279,7 +262,7 @@ export default {
           })
           .then(result => {
             if (result.data) {
-              
+
               this.sample = result.data;
               result.data.PicList.forEach(item => {
                 //debugger;
@@ -288,8 +271,29 @@ export default {
                 this.picstrList.push(item.rurl);
               });
               for (let p of result.data.Material) {
-                this.Material =
-                  this.Material + p.percent + "%" + p.materials + " ";
+                // this.Material =
+                //   this.Material + p.percent + "%" + p.materials + " ";
+
+                if (!p.yarnId) p.yarnId = 1;
+                if (!p.enName) p.enName = "";
+                let m = this.mList.find(t => {
+                  return t.yarnId == p.yarnId;
+                });
+                if (m) {
+                  m.Material = m.Material + p.percent + "%" + p.materials + '(' + p.enName + ')' + " ";
+                } else {
+                  let nm = {
+                    yarnId: p.yarnId,
+                    Material: '',
+                    MaterialEn: '',
+                    counts: p.counts ? p.counts : "",
+                  };
+                  nm.Material = nm.Material + p.percent + "%" + p.materials + '(' + p.enName + ')' + " ";
+                  this.mList.push(nm);
+                }
+
+
+
               }
               this.picstr = this.sample.PicList[0].name;
               resolve(this.sample);
