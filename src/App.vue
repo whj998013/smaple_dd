@@ -23,6 +23,7 @@ export default {
       this.$nextTick(function(){
         this.isRouterAlive=true;
       })
+      
     }
   }
   
