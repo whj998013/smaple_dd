@@ -7,13 +7,18 @@
 <script>
 import dd from "dingtalk-jsapi";
 import cookie from "../libs/cookie.js";
+import loginApi from "../libs/loginApi.js";
+import { debug } from 'util';
+
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      redirect: "",
+    };
   },
 
-  mounted() {    
+  mounted() {
     let status = this.$route.params.status;
     if (status == 401) {
       this.$Notice.error({
@@ -24,9 +29,25 @@ export default {
     }
     this.$bus.isPc = dd.pc;
     this.$bus.isDD = !dd.other;
-    console.log('mode:',this.$util.devMode,'url',this.$util.baseURL);
-    if(this.$bus.isDD) this.cookinLogin();
-    else if(this.$util.devMode) this.PcLogin();
+    if (this.$bus.isDD)
+      loginApi
+        .beginLogin()
+        .then(re => {
+          //登录成功
+          let redirect = this.$route.query.redirect;
+          console.log("redurl:", redirect);
+          if (redirect) {
+            this.$router.push(redirect);
+          } else {
+            this.$router.push("/");
+          }
+        })
+        .catch(re => {
+          //登录失败
+          console.log("login error result:", re);
+          this.isWebLogin = true;
+        });
+    else if (this.$util.devMode) this.PcLogin();
   },
 
   methods: {
@@ -37,64 +58,25 @@ export default {
         duration: 5
       });
     },
-    loginFinsh(user) {
-      this.$bus.setCookieUser(user);
-      this.$router.back(-1);
-    },
-
-    cookinLogin() {
-      let cookiestr = cookie.get("lh");
-      if (cookiestr != null) {
-        this.$util
-          .post("/login/CookieLogin", { cookie: cookiestr })
-          .then(re => {
-            if (re.data != null) {
-              this.loginFinsh(re.data);
-              console.log("cookie登录成功", this.$bus.currentUser);
-            } else {
-              console.log("cookie失效，开始钉钉登录");
-              this.ddLogin();
-            }
-          })
-          .catch(re => {
-            console.log("cookie登录错误，尝试钉钉登录");
-            this.ddLogin();
-          });
-      } else {
-        console.log("cookie失效，尝试钉钉登录");
-        this.ddLogin();
-      }
-    },
-    ddLogin() {
-      let _this = this;
-      ///钉钉登录
-      dd.ready(function() {
-        dd.runtime.permission.requestAuthCode({
-          corpId: "ding99dd341fc99a25eb", // 企业id
-          onSuccess: function(info) {
-            console.log("ddinfo", info);
-            _this.$util.post("/login/ddlogin", { code: info.code }).then(re => {
-              console.log("re", re);
-              _this.loginFinsh(re.data);
-              ///设置免登cookie
-              cookie.set("lh", re.data.LoginCookie, re.data.LoginOverTime);
-            });
-          }
-        });
-      });
-    },
     PcLogin() {
       let ds = { name: "whj", pwd: "998013" };
       console.log("开始Web登录");
       this.$util
         .post("/login/Weblogin", ds)
         .then(re => {
-          if (re.data != null) {       
-            this.loginFinsh(re.data);
-          } 
+          if (re.data != null) {
+            loginApi.loginFinsh(re.data);
+            let redirect = this.$route.query.redirect;
+            console.log("redurl:", redirect);
+            if (redirect) {
+              this.$router.push(redirect);
+            } else {
+              this.$router.push("/");
+            }
+          }
         })
         .catch(p => {
-          this.showServerErrorMsg(p);  
+          this.showServerErrorMsg(p);
         });
     }
   }

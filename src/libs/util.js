@@ -1,39 +1,17 @@
-import axios from 'axios';
-import cookie from "./cookie.js"
-import Vue from 'vue'
-axios.defaults.withCredentials = true;
-console.log("mode",process.env.NODE_ENV);
-let util = {};
+import ajaxUtil from './ajaxUtil';
 
+//console.log("mode",process.env.NODE_ENV);
+let util = {};
 const dataUrl=process.env.NODE_ENV=='development'?'http://api.sungingroup.com:8082' :'http://app.sungingroup.com:8082';
 const ajaxUrl = dataUrl+'/api';
-util.baseURL = ajaxUrl;
+
 util.fileUrl = dataUrl;
 util.devMode=process.env.NODE_ENV=='development'?true:false;
-util.ajax = axios.create({
-    baseURL: ajaxUrl,
-    timeout: 30000,
-});
-util.ajax.interceptors.response.use(function (response) {
-    //对返回的数据进行一些处理  
-    return response;
-}, function (error) {
-    //对返回的错误进行一些处理
-   
-    if (error.response.status == 404) {
-        console.log("服务器没有找到相应数据：",error.response);
-    }    
-    if (error.response.status == 400) {
-        Vue.$vux.alert.show({
-            title: "信息",
-            content: error.response.data.Message,
-        });
-    }
-    return Promise.reject(error);
-});
 
+util.ajax=ajaxUtil.getAjax(ajaxUrl);
 util.post = util.ajax.post;
 util.get = util.ajax.get;
+
 util.getMaterial = (arr) => {
     let materstr = '';
     for (let p of arr) {
@@ -41,6 +19,7 @@ util.getMaterial = (arr) => {
     }
     return materstr;
 };
+
 util.removeByValue = (arr, val) => {
     for (var i = 0; i < arr.length; i++) {
         if (arr[i] == val) {
@@ -48,6 +27,22 @@ util.removeByValue = (arr, val) => {
             break;
         }
     }
-}
+};
+util.getGmtDate=(dstr)=>{
+    let dt;
+    // if (dstr instanceof Date) {
+    //     dt = dstr;
+    // } else {
+    //     dt = new Date(dstr);
+    // };
+    dt = dstr instanceof Date ? dstr : new Date(dstr);
+    let y = dt.getFullYear();
+    let m = dt.getMonth() + 1;
+    let d = dt.getDate();
+    let ms = m > 9 ? m : ('0' + m);
+    let ds = d > 9 ? d : ('0' + d);
+    let str = y + '-' + ms + '-' + ds;
+    return str;
+};
 
 export default util;

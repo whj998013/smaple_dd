@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/home'
+import SampleHome from '@/views/sample/home'
+import ProofHome from '@/views/proof/home'
+
 import bus from '../bus.js'
 Vue.use(Router);
 
@@ -13,23 +15,67 @@ let router = new Router({
         title: '样品信息',
         requireAuth: true,
       },
-      component: (resolve) => require(['../views/sampleinfo.vue'], resolve)
+      component: (resolve) => require(['../views/sample/sampleinfo.vue'], resolve)
     },
     {
+      path: '/proof',
+      meta: {
+        title: '打样单',
+        requireAuth: true,
+      },
+      component: ProofHome,
+      children: [
+        {
+          path: '/proof',
+          meta: {
+            title: '样衣库',
+            requireAuth: true,
+          },
+          component: (resolve) => require(['../views/proof/prooftask.vue'], resolve)
+        },
+        {
+          path: '/proof/prooftask',
+          meta: {
+            title: '样衣库',
+            requireAuth: true,
+          },
+          component: (resolve) => require(['../views/proof/prooftask.vue'], resolve)
+        },
+        {
+          path: '/proof/oldProofTask',
+          meta: {
+            title: '样衣库',
+            requireAuth: true,
+          },
+          component: (resolve) => require(['../views/proof/oldProofTask.vue'], resolve)
+        },
+
+      ]
+    },
+
+    //样衣管理
+    {
       path: '/',
-      name: 'Home',
       meta: {
         requireAuth: true,
       },
-      component: Home,
+      component: SampleHome,
       children: [
         {
           path: '/',
           meta: {
-            title: '借样衣',
+            title: '样衣库',
             requireAuth: true,
           },
-          component: (resolve) => require(['../views/lend.vue'], resolve)
+          component: (resolve) => require(['../views/sample/sampleList.vue'], resolve)
+        },
+        {
+          path: '/sampleList',
+          meta: {
+            title: '样衣库',
+            requireAuth: true,
+          },
+          component: (resolve) => require(['../views/sample/sampleList.vue'], resolve)
         },
         {
           path: '/lend',
@@ -37,7 +83,7 @@ let router = new Router({
             title: '借样衣',
             requireAuth: true,
           },
-          component: (resolve) => require(['../views/lend.vue'], resolve)
+          component: (resolve) => require(['../views/sample/lend.vue'], resolve)
         },
         {
           path: '/lendlist',
@@ -45,10 +91,11 @@ let router = new Router({
             title: '已借用',
             requireAuth: true,
           },
-          component: (resolve) => require(['../views/lendlist.vue'], resolve)
+          component: (resolve) => require(['../views/sample/lendlist.vue'], resolve)
         },
       ]
     },
+    //登录管理
     {
       path: '/login',
       meta: {
@@ -65,6 +112,7 @@ let router = new Router({
     },
   ]
 });
+
 router.beforeEach((to, from, next) => {
   
   if (to.matched.some(record => record.meta.requireAuth)) { // 判断该路由是否需要登录权限
