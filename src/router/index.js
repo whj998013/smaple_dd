@@ -56,10 +56,6 @@ let router = new Router({
     //样衣管理
     {
       path: '/',
-<<<<<<< HEAD
-     
-=======
->>>>>>> master
       meta: {
         requireAuth: true,
       },
@@ -69,19 +65,6 @@ let router = new Router({
           path: '/',
           meta: {
             title: '样衣库',
-<<<<<<< HEAD
-            requireAuth: true,
-          },
-          component: (resolve) => require(['../views/sampleList.vue'], resolve)
-        },
-        {
-          path: '/sampleList',
-          meta: {
-            title: '样衣库',
-            requireAuth: true,
-          },
-          component: (resolve) => require(['../views/sampleList.vue'], resolve)
-=======
             requireAuth: true,
           },
           component: (resolve) => require(['../views/sample/sampleList.vue'], resolve)
@@ -93,7 +76,6 @@ let router = new Router({
             requireAuth: true,
           },
           component: (resolve) => require(['../views/sample/sampleList.vue'], resolve)
->>>>>>> master
         },
         {
           path: '/lend',

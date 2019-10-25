@@ -21,12 +21,9 @@ export default {
   },
   methods: {
   
-<<<<<<< HEAD
-=======
   },
    mounted(){
       this.$vux.loading.hide();
->>>>>>> master
   }
 };
 </script>

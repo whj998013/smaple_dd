@@ -28,8 +28,6 @@ util.removeByValue = (arr, val) => {
         }
     }
 };
-<<<<<<< HEAD
-=======
 util.getGmtDate=(dstr)=>{
     let dt;
     // if (dstr instanceof Date) {
@@ -46,6 +44,5 @@ util.getGmtDate=(dstr)=>{
     let str = y + '-' + ms + '-' + ds;
     return str;
 };
->>>>>>> master
 
 export default util;

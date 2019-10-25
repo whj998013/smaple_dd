@@ -26,11 +26,8 @@ let loginApi = {
             });
         })
     },
-<<<<<<< HEAD
-=======
 
     
->>>>>>> master
     loginFinsh(user) {
         ///设置免登cookie
         cookie.set("lh", user.LoginCookie, user.LoginOverTime);
