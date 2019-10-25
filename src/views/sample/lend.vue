@@ -117,7 +117,7 @@ export default {
         this.confirmstr =
           "样衣:" +
           this.confirmstr +
-          "不在库内或不可外借，点继续将删除这些样衣并发起申请。";
+          "不在库内或不可外借，是否继续发起申请。";
         this.showConfirm = true;
       };
      
@@ -202,7 +202,7 @@ export default {
       let list = ls.map(item => {
         let cf = this.$util.getMaterial(JSON.parse(item.Material));
         return {
-          src: pichost + "/pic/MinPic/" + item.Pic,
+          src: pichost + "/src/sample/pic/MinPic/" + item.Pic,
           title: item.StyleId + "&nbsp&nbsp[" + item.StatsText + "]",
           StyleId: item.StyleId,
           asLend: item.AsLend,
