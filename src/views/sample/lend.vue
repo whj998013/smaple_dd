@@ -117,11 +117,7 @@ export default {
         this.confirmstr =
           "样衣:" +
           this.confirmstr +
-<<<<<<< HEAD:src/views/lend.vue
-          "被标记为不在库内或不可外借，是否继续发起申请？";
-=======
           "不在库内或不可外借，是否继续发起申请。";
->>>>>>> master:src/views/sample/lend.vue
         this.showConfirm = true;
       };
      
