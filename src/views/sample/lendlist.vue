@@ -13,17 +13,14 @@
 </template>
 
 <script>
-import {Actionsheet, Group, Cell, Panel, TransferDom, XButton } from "vux";
+import { Actionsheet, TransferDom, Panel, } from "vux";
 import dd from "dingtalk-jsapi";
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Group,
-    Cell,
     Panel,
-    XButton,
     Actionsheet
   },
 
@@ -54,7 +51,7 @@ export default {
         show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
         control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
         text: "刷新", //控制显示文本，空字符串表示显示默认文本
-        onSuccess: function(result) {
+        onSuccess: function (result) {
           //如果control为true，则onSuccess将在发生按钮点击事件被回调
           _this.getData();
         }
@@ -123,7 +120,7 @@ export default {
     },
     getShowLendList(ls) {
       //取数据
-      console.log("sample:",ls);
+      console.log("sample:", ls);
       let pichost = this.$util.fileUrl;
       let list = ls.map(item => {
         let cf = this.$util.getMaterial(JSON.parse(item.Material));
@@ -134,15 +131,7 @@ export default {
           State: item.State,
           asLend: item.AsLend,
           lendState: item.LendState,
-          desc:
-            "款号:" +
-            item.StyleNo +
-            "，&nbsp针型:" +
-            item.Gauge +
-            "， &nbsp克重:" +
-            item.Weight +
-            "g， &nbsp成份:" +
-            cf
+          desc: "款号:" + item.StyleNo + "，&nbsp针型:" + item.Gauge + "， &nbsp克重:" + item.Weight + "g， &nbsp成份:" + cf
         };
       });
       return list;

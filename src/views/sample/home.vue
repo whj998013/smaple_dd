@@ -5,6 +5,7 @@
    
     <tabbar style="position:fixed">   
          <tabbar-item  selected link="/sampleList?showmenu=false">
+<<<<<<< HEAD:src/views/home.vue
         <img slot="icon" src="../assets/huopinliebiao.png">
         <span slot="label">样衣库</span>
       </tabbar-item>
@@ -14,6 +15,17 @@
       </tabbar-item>
       <tabbar-item  link="/lendlist?showmenu=false">
         <img slot="icon" src="../assets/gukeliebiao.png">
+=======
+        <img slot="icon" src="@/assets/huopinliebiao.png">
+        <span slot="label">样衣库</span>
+      </tabbar-item>
+      <tabbar-item   link="/lend?showmenu=false">
+        <img slot="icon" src="@/assets/erweima.png">
+        <span slot="label">扫码借用</span>
+      </tabbar-item>
+      <tabbar-item  link="/lendlist?showmenu=false">
+        <img slot="icon" src="@/assets/gukeliebiao.png">
+>>>>>>> master:src/views/sample/home.vue
         <span slot="label">已借样衣</span>
       </tabbar-item>
     </tabbar>

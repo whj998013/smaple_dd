@@ -17,6 +17,7 @@
     "dingtalk-jsapi": "^2.0.67",
     "fastclick": "^1.0.6",
     "fs": "^0.0.1-security",
+    "net": "^1.0.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^2.1.1",

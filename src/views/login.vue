@@ -8,11 +8,17 @@
 import dd from "dingtalk-jsapi";
 import cookie from "../libs/cookie.js";
 import loginApi from "../libs/loginApi.js";
+<<<<<<< HEAD
+=======
+import { debug } from 'util';
+>>>>>>> master
 
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      redirect: "",
+    };
   },
 
   mounted() {
@@ -26,7 +32,10 @@ export default {
     }
     this.$bus.isPc = dd.pc;
     this.$bus.isDD = !dd.other;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     if (this.$bus.isDD)
       loginApi
         .beginLogin()
@@ -56,7 +65,11 @@ export default {
         duration: 5
       });
     },
+<<<<<<< HEAD
      PcLogin() {
+=======
+    PcLogin() {
+>>>>>>> master
       let ds = { name: "whj", pwd: "998013" };
       console.log("开始Web登录");
       this.$util
@@ -64,7 +77,17 @@ export default {
         .then(re => {
           if (re.data != null) {
             loginApi.loginFinsh(re.data);
+<<<<<<< HEAD
             this.$router.push("/");
+=======
+            let redirect = this.$route.query.redirect;
+            console.log("redurl:", redirect);
+            if (redirect) {
+              this.$router.push(redirect);
+            } else {
+              this.$router.push("/");
+            }
+>>>>>>> master
           }
         })
         .catch(p => {
