@@ -10,6 +10,7 @@
       <actionsheet v-model="show2" :menus="menu2" @on-click-menu="doAction" show-cancel>
       </actionsheet>
     </div>
+    <sampleView ref="sv" @Closed="sampleColse"></sampleView>
   </div>
 </template>
 
@@ -25,6 +26,7 @@ import {
   LoadMore
 } from "vux";
 import dd from "dingtalk-jsapi";
+import sampleView from "./components/sampleView"
 export default {
   directives: {
     TransferDom
@@ -36,7 +38,8 @@ export default {
     Panel,
     XButton,
     Actionsheet,
-    LoadMore
+    LoadMore,
+    sampleView
   },
   data() {
     return {
@@ -65,6 +68,9 @@ export default {
     };
   },
   methods: {
+    sampleColse() {
+      this.setNav();
+    },
     onSubmit() {
       this.seachObj.keyWord = this.seachValue;
       this.seachObj.current = 1;
@@ -80,10 +86,7 @@ export default {
       }
     },
     showSample() {
-      this.$router.push({
-        path: "/sampleinfo/" + this.currentItem.StyleId,
-        query: { showlend: false }
-      });
+      this.$refs.sv.ShowSample(this.currentItem.StyleId);
       this.show = false;
     },
     showSeach() {
@@ -174,28 +177,32 @@ export default {
             // 请求失败时，将 REQUIRE 置为 true，滚动到底部时，再次请求
           });
       }
+    },
+    setNav() {
+      let _this = this;
+      if (dd.other) this.isdd = false;
+      else {
+        dd.biz.navigation.setRight({
+          show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
+          control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
+          text: "搜索", //控制显示文本，空字符串表示显示默认文本
+          onSuccess: function (result) {
+            //如果control为true，则onSuccess将在发生按钮点击事件被回调
+            _this.showSeach();
+          }
+        });
+        dd.biz.navigation.setTitle({
+          title: "样衣库" //控制标题文本，空字符串表示显示默认文本
+        });
+      }
     }
   },
   mounted() {
-    let _this = this;
     this.$vux.loading.hide();
+    this.setNav();
     this.getData();
     window.addEventListener("scroll", this.scrollBottom);
-    if (dd.other) this.isdd = false;
-    else {
-      dd.biz.navigation.setRight({
-        show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
-        control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
-        text: "搜索", //控制显示文本，空字符串表示显示默认文本
-        onSuccess: function (result) {
-          //如果control为true，则onSuccess将在发生按钮点击事件被回调
-          _this.showSeach();
-        }
-      });
-      dd.biz.navigation.setTitle({
-        title: "样衣库" //控制标题文本，空字符串表示显示默认文本
-      });
-    }
+
   },
   destroyed() {
     window.removeEventListener("scroll", this.scrollBottom);

@@ -11,13 +11,29 @@
     <br>
     <br>
     <div v-transfer-dom>
-
       <actionsheet v-model="show" :menus="menu" @on-click-menu="doAction" show-cancel>
       </actionsheet>
       <confirm v-model="showConfirm" title="确定吗" @on-cancel="handChacel" @on-confirm="applyLendOut">
         <p style="text-align:center;">{{confirmstr}}</p>
       </confirm>
+      <popup v-model="showPopup">
+        <div class="popup2">
+          <group title="填写借用信息">
+            <!-- <p>{{lendDay}},{{checkValue}}</p> -->
+            <x-number title="借用天数" v-model="lendDay" width="100px" :min="1" :max="30"></x-number>
+          </group>
+          <group>
+            <checklist title="选择用途" required :options="commonList" :max="1" v-model="checkValue"></checklist>
+          </group>
+          <group>
+            <x-button type="primary" @click.native="doApplyLendOut" :disabled="isButtonDisable">确定</x-button>
+            <x-button type="default" @click.native="showPopup=false">取消</x-button>
+            <br>
+          </group>
+        </div>
+      </popup>
     </div>
+    <sampleView ref="sv" @Closed="sampleColse"></sampleView>
   </div>
 
 </template>
@@ -30,9 +46,13 @@ import {
   Panel,
   TransferDom,
   XButton,
-  Confirm
+  Popup,
+  Confirm,
+  XNumber,
+  Checklist
 } from "vux";
 import dd from "dingtalk-jsapi";
+import sampleView from "./components/sampleView";
 export default {
   directives: {
     TransferDom
@@ -43,9 +63,13 @@ export default {
     Cell,
     Panel,
     Confirm,
-    Actionsheet
+    Actionsheet,
+    Popup,
+    XNumber,
+    Checklist,
+    sampleView
   },
-  inject:['reload'],
+  inject: ['reload'],
   data() {
     return {
       menu: {
@@ -62,41 +86,56 @@ export default {
       confirmstr: "",
       currentItem: {},
       lendlist: [],
-      ic: 1
+      ic: 1,
+      showPopup: false,
+      lendDay: 7,
+      commonList: [],
+      checkValue: [],
     };
   },
   computed: {
-    list: function() {
+    list: function () {
       if (this.lendlist.length > 0) {
         return this.getShowLendList(this.lendlist);
       } else return null;
+    },
+    isButtonDisable: function () {
+      if (this.checkValue.length > 0) return false;
+      else return true;
     }
   },
   mounted() {
-    let _this = this;
+
     this.getLendListFromServer().then(p => {
-      _this.lendlist = p;
+      this.lendlist = p;
     });
-    if (dd.other) this.isdd = false;
-    else {
-      dd.biz.navigation.setRight({
-        show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
-        control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
-        text: "申请借用", //控制显示文本，空字符串表示显示默认文本
-        onSuccess: function(result) {
-          //如果control为true，则onSuccess将在发生按钮点击事件被回调
-          console.log("点申请借用");
-          _this.applyLendOutConfirm();
-        }
-      });
-      dd.biz.navigation.setTitle({
-        title: "扫码借样" //控制标题文本，空字符串表示显示默认文本
-      });
-    }
+    this.setNav();
     this.$vux.loading.hide();
   },
 
   methods: {
+    setNav() {
+      let _this = this;
+      if (dd.other) this.isdd = false;
+      else {
+        dd.biz.navigation.setRight({
+          show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
+          control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
+          text: "申请借用", //控制显示文本，空字符串表示显示默认文本
+          onSuccess: function (result) {
+            //如果control为true，则onSuccess将在发生按钮点击事件被回调
+            console.log("点申请借用");
+            _this.applyLendOutConfirm();
+          }
+        });
+        dd.biz.navigation.setTitle({
+          title: "扫码借样" //控制标题文本，空字符串表示显示默认文本
+        });
+      }
+    },
+    sampleColse() {
+      this.setNav();
+    },
     doAction(menuKey, menuItem) {
       console.log(menuKey, menuItem);
       if (menuKey == "info") {
@@ -120,23 +159,37 @@ export default {
           "不在库内或不可外借，是否继续发起申请。";
         this.showConfirm = true;
       };
-     
+
     },
     handChacel() {
       (this.confirmstr = ""), (this.showConfirm = false);
     },
-    applyLendOut() {
+    async applyLendOut() {
+      let re = await this.$util.get("/Public/GetPurpose");
+      console.log("s", re);
+      this.commonList = re.data;
+      this.confirmstr = "";
+      this.showPopup = true;
+    },
+    doApplyLendOut() {
+
       let lendIdList = this.lendlist.map(item => {
         return item.Id;
       });
-      this.$util.post("/LendOut/ApplyLendOut", lendIdList).then(result => {
+      let requestObj = {
+        lendIdList,
+        lendDay: this.lendDay,
+        lendPurpost: this.checkValue[0]
+      }
+
+      this.$util.post("/LendOut/ApplyLendOut", requestObj).then(result => {
         this.$vux.alert.show({
           title: "成功",
           content: "样衣外借申请已发出，等待管理员审批。"
         });
-        
+
         this.reload();
-        this.confirmstr="";
+        this.confirmstr = "";
       });
     },
 
@@ -145,21 +198,18 @@ export default {
       let _this = this;
       dd.biz.util.scan({
         type: "all", // type 为 all、qrCode、barCode，默认是all。
-        onSuccess: function(data) {
+        onSuccess: function (data) {
           let bg = data.text.indexOf("/SI") + 1;
           if (bg > 10) {
             let styleId = data.text.substring(bg, bg + 11);
             _this.$router.push("/sampleinfo/" + styleId);
           }
         },
-        onFail: function(err) {}
+        onFail: function (err) { }
       });
     },
     showSample() {
-      this.$router.push({
-        path: "/sampleinfo/" + this.currentItem.StyleId,
-        query: { showlend: false }
-      });
+      this.$refs.sv.ShowSample(this.currentItem.StyleId);
       this.show = false;
     },
     deleteLend() {
@@ -185,8 +235,8 @@ export default {
     },
     getData() {
       this.getLendListFromServer().then(p => {
-      _this.lendlist = p;
-    });;
+        _this.lendlist = p;
+      });;
     },
     getLendListFromServer() {
       return new Promise(resolve => {
