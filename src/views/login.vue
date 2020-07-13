@@ -29,6 +29,7 @@ export default {
     }
     this.$bus.isPc = dd.pc;
     this.$bus.isDD = !dd.other;
+     
     if (this.$bus.isDD)
       loginApi
         .beginLogin()
@@ -59,7 +60,9 @@ export default {
       });
     },
     PcLogin() {
+      let ds2 = { name: "ymn", pwd: "123456" };
       let ds = { name: "whj", pwd: "998013" };
+
       console.log("开始Web登录");
       this.$util
         .post("/login/Weblogin", ds)

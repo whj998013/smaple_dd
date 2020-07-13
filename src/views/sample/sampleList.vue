@@ -60,7 +60,7 @@ export default {
         current: 1,
         total: 0,
         pageSize: 20,
-        keyWord: "", //关建词
+        Key: "", //关建词
         dateValue: [], //日期区间
         State: 0, //状态,
         UserId: []
@@ -72,7 +72,7 @@ export default {
       this.setNav();
     },
     onSubmit() {
-      this.seachObj.keyWord = this.seachValue;
+      this.seachObj.Key = this.seachValue;
       this.seachObj.current = 1;
       this.REQUIRE = true;
       this.data = [];
@@ -98,10 +98,11 @@ export default {
       });
     },
     onCancel() {
+     
       this.isShowSeach = false;
       this.seachValue = "";
-      if (this.seachObj.keyWord != "") {
-        this.seachObj.keyWord = "";
+      if (this.seachObj.Key != "") {
+        this.seachObj.Key = "";
         this.seachObj.current = 1;
         this.tips = "";
         this.getData();
@@ -112,6 +113,7 @@ export default {
       this.show2 = true;
     },
     getData() {
+      console.log("seachobj",this.seachObj);
       return new Promise(resolve => {
         this.$util.post("sample/getsamplelist", this.seachObj).then(result => {
           this.seachObj.total = result.data.total;
