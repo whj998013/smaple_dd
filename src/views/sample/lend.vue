@@ -165,7 +165,7 @@ export default {
       (this.confirmstr = ""), (this.showConfirm = false);
     },
     async applyLendOut() {
-      let re = await this.$util.get("/Public/GetPurpose");
+      let re = await this.$util.get("apiaction/Public/GetPurpose");
       console.log("s", re);
       this.commonList = re.data;
       this.confirmstr = "";
@@ -182,7 +182,7 @@ export default {
         lendPurpost: this.checkValue[0]
       }
 
-      this.$util.post("/LendOut/ApplyLendOut", requestObj).then(result => {
+      this.$util.post("apiaction/LendOut/ApplyLendOut", requestObj).then(result => {
         this.$vux.alert.show({
           title: "成功",
           content: "样衣外借申请已发出，等待管理员审批。"
@@ -215,7 +215,7 @@ export default {
     deleteLend() {
       console.log("currtenitem:", this.currentItem);
       this.$util
-        .post("/lendOut/deleteLend", [this.currentItem.Id])
+        .post("apiaction/lendOut/deleteLend", [this.currentItem.Id])
         .then(result => {
           console.log(this.lendlist);
           for (var i = 0; i < this.lendlist.length; i++) {
@@ -240,7 +240,7 @@ export default {
     },
     getLendListFromServer() {
       return new Promise(resolve => {
-        this.$util.get("/LendOut/GetLendList").then(result => {
+        this.$util.get("apiaction/LendOut/GetLendList").then(result => {
           resolve(result.data);
         });
       });

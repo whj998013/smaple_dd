@@ -115,7 +115,7 @@ export default {
     getData() {
       console.log("seachobj",this.seachObj);
       return new Promise(resolve => {
-        this.$util.post("sample/getsamplelist", this.seachObj).then(result => {
+        this.$util.post("apiaction/sample/getsamplelist", this.seachObj).then(result => {
           this.seachObj.total = result.data.total;
           this.data = this.data.concat(result.data.items);
           this.sampleList = this.sampleList.concat(

@@ -3,7 +3,7 @@ import ajaxUtil from './ajaxUtil';
 //console.log("mode",process.env.NODE_ENV);
 let util = {};
 const dataUrl=process.env.NODE_ENV=='development'?'http://api.sungingroup.com:8082' :'https://app.sungingroup.com:8182';
-const ajaxUrl = dataUrl+'/api';
+const ajaxUrl = dataUrl+'/';
 
 util.fileUrl = dataUrl;
 util.devMode=process.env.NODE_ENV=='development'?true:false;

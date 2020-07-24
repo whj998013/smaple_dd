@@ -240,7 +240,7 @@ export default {
     async getData() {
 
       console.log("getdata");
-      let result = await this.$util.get("/sample/GetSample", { params: { styleId: this.id } });
+      let result = await this.$util.get("apiaction/sample/GetSample", { params: { styleId: this.id } });
       if (result.data) {
         this.sample = result.data;
         result.data.PicList.forEach(item => {

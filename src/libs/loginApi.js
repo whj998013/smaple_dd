@@ -41,7 +41,7 @@ let loginApi = {
             let cookiestr = cookie.get("lh");
             console.log("cookid:" + cookiestr);
             if (cookiestr != null) {
-                Util.post("/login/CookieLogin", {
+                Util.post("apiaction/login/CookieLogin", {
                         cookie: cookiestr
                     })
                     .then(re => {
@@ -70,7 +70,7 @@ let loginApi = {
                 dd.runtime.permission.requestAuthCode({
                     corpId: "ding99dd341fc99a25eb", // 企业id
                     onSuccess: function (info) {
-                        Util.post("/login/ddlogin", {
+                        Util.post("apiaction/login/ddlogin", {
                             code: info.code
                         }).then(re => {
                             // vue.$Message.success("钉钉登录成功！");

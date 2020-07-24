@@ -39,7 +39,7 @@ export default {
     },
 
     async getData() {
-      let l = await this.$util.get("/ProofMange/GetFinshPlanList");
+      let l = await this.$util.get("apiaction/ProofMange/GetFinshPlanList");
       this.proofList = this.getShowList(l.data);
     },
 

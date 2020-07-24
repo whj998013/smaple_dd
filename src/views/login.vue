@@ -65,7 +65,7 @@ export default {
 
       console.log("开始Web登录");
       this.$util
-        .post("/login/Weblogin", ds)
+        .post("apiaction/login/Weblogin", ds)
         .then(re => {
           if (re.data != null) {
             loginApi.loginFinsh(re.data);

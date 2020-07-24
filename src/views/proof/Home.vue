@@ -76,7 +76,7 @@ export default {
     },
     getProofByBh(bh) {
       console.log(bh);
-      this.$util.get("/ProofMange/GetProofOrderByBh/" + parseInt(bh)).then(re => {
+      this.$util.get("apiaction/ProofMange/GetProofOrderByBh/" + parseInt(bh)).then(re => {
         console.log(re);
         this.showProof(re.data);
       }).catch(err => {
@@ -110,7 +110,7 @@ export default {
     ///确认提交交样申请
     finshProof() {
       
-      this.$util.get("/ProofMange/FinshProof/" + this.currnetProof.ProofOrderId).then(
+      this.$util.get("apiaction/ProofMange/FinshProof/" + this.currnetProof.ProofOrderId).then(
         re => {
           this.$vux.alert.show({
             title: '成功',

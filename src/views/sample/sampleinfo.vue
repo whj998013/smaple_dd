@@ -101,7 +101,7 @@ export default {
     doLendout(styleId) {
       let p = new Promise((resolve, reject) => {
         this.$util
-          .post("/LendOut/DoLendOut", { styleId: styleId })
+          .post("apiaction/LendOut/DoLendOut", { styleId: styleId })
           .then(result => {
             resolve(this.sample);
           });

@@ -102,7 +102,7 @@ export default {
       //取消借用
       this.show = false;
       this.$util
-        .post("/LendOut/cancelLend", { StyleId: this.currentItem.StyleId })
+        .post("apiaction/LendOut/cancelLend", { StyleId: this.currentItem.StyleId })
         .then(result => {
           this.$util.removeByValue(this.applyList, this.currentItem);
         });
@@ -118,7 +118,7 @@ export default {
     },
     getLendOutListFromServer() {
       return new Promise(resolve => {
-        this.$util.get("/LendOut/GetLendOutList").then(result => {
+        this.$util.get("apiaction/LendOut/GetLendOutList").then(result => {
           resolve(result.data);
         });
       });

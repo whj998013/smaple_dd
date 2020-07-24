@@ -41,7 +41,7 @@ export default {
 
 
     async getData() {
-      let l = await this.$util.get("/ProofMange/GetProofPlanList");
+      let l = await this.$util.get("apiaction/ProofMange/GetProofPlanList");
       this.proofList = this.getShowList(l.data);
     },
 
