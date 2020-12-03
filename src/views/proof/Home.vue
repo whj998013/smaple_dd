@@ -63,7 +63,7 @@ export default {
     scanCode() {
       let _this = this;
       dd.biz.util.scan({
-        type: String, // type 为 all、qrCode、barCode，默认是all。
+        type: "all", // type 为 all、qrCode、barCode，默认是all。
         onSuccess: function (data) {
           //onSuccess将在扫码成功之后回调
           console.log(data);
@@ -71,6 +71,7 @@ export default {
 
         },
         onFail: function (err) {
+        
         }
       })
     },
@@ -80,8 +81,6 @@ export default {
         console.log(re);
         this.showProof(re.data);
       }).catch(err => {
-        console.log("errorfffffr")
-
          this.$vux.alert.show({
             title: '错误',
             content: '未找到该包号的打样单信息，该打样单也许未通过钉钉打样系统生成。'
@@ -136,6 +135,7 @@ export default {
         text: "扫码交样", //控制显示文本，空字符串表示显示默认文本
         onSuccess: function (result) {
           //如果control为true，则onSuccess将在发生按钮点击事件被回调
+          
           _this.scanCode();
         }
       });

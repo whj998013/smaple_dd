@@ -98,7 +98,7 @@ export default {
       });
     },
     onCancel() {
-     
+     alert("取消");
       this.isShowSeach = false;
       this.seachValue = "";
       if (this.seachObj.Key != "") {
